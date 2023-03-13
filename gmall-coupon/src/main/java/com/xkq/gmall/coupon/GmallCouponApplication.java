@@ -1,8 +1,10 @@
-package com.xkq.gmall.gmallcoupon;
+package com.xkq.gmall.coupon;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+@MapperScan("com.xkq.gmall.coupon.dao")
 @SpringBootApplication
 public class GmallCouponApplication {
 
