@@ -20,7 +20,8 @@
         <maven.compiler.target>8</maven.compiler.target>
         <spring-boot.version>2.1.8.RELEASE</spring-boot.version>
         <spring-cloud.version>Greenwich.SR3</spring-cloud.version>
-        <spring-cloud-alibaba.version>2.1.2.RELEASE</spring-cloud-alibaba.version>
+        <!--2.1.2.RELEASE找不到bootstrap.properties会默认使用本地配置文件，导致注册中心配置没用-->
+        <spring-cloud-alibaba.version>2.1.0.RELEASE</spring-cloud-alibaba.version>
         <druid.version>1.1.13</druid.version>
     </properties>
 
