@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,11 +26,23 @@ import com.xkq.common.utils.R;
  * @email xu.kq@qq.com
  * @date 2023-03-12 21:13:42
  */
+@RefreshScope
 @RestController
 @RequestMapping("product/brand")
 public class BrandController {
     @Autowired
     private BrandService brandService;
+
+    @Value("${product.user.name}")
+    private String name;
+
+    @Value("${product.user.age}")
+    private String age;
+
+    @RequestMapping("/test")
+    public R test(){
+        return R.ok().put("name", name).put("age", age);
+    }
 
     /**
      * 列表
