@@ -3,6 +3,7 @@ package com.xkq.gmall.product.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.xkq.gmall.product.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +16,7 @@ import com.xkq.gmall.product.service.AttrGroupService;
 import com.xkq.common.utils.PageUtils;
 import com.xkq.common.utils.R;
 
+import javax.annotation.Resource;
 
 
 /**
@@ -29,6 +31,8 @@ import com.xkq.common.utils.R;
 public class AttrGroupController {
     @Autowired
     private AttrGroupService attrGroupService;
+    @Resource
+    CategoryService categoryService;
 
     /**
      * 列表
@@ -48,7 +52,6 @@ public class AttrGroupController {
     //@RequiresPermissions("product:attrgroup:list")
     public R list(@RequestParam Map<String, Object> params, @PathVariable Long categoryId){
         PageUtils page = attrGroupService.queryPage(params, categoryId);
-
         return R.ok().put("page", page);
     }
 
@@ -61,6 +64,9 @@ public class AttrGroupController {
     public R info(@PathVariable("attrGroupId") Long attrGroupId){
 		AttrGroupEntity attrGroup = attrGroupService.getById(attrGroupId);
 
+        // 获取完整分类路径，前端回显
+        Long[] path = categoryService.findCategoryPath(attrGroup.getCatelogId());
+        attrGroup.setCatelogPath(path);
         return R.ok().put("attrGroup", attrGroup);
     }
 

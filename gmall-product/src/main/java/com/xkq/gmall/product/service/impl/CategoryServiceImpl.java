@@ -1,7 +1,9 @@
 package com.xkq.gmall.product.service.impl;
 
+import com.xkq.gmall.product.service.CategoryBrandRelationService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -15,11 +17,17 @@ import com.xkq.common.utils.Query;
 import com.xkq.gmall.product.dao.CategoryDao;
 import com.xkq.gmall.product.entity.CategoryEntity;
 import com.xkq.gmall.product.service.CategoryService;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import javax.annotation.Resource;
 
 
 @Service("categoryService")
 public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity> implements CategoryService {
 
+    @Resource
+    CategoryBrandRelationService relationService;
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         IPage<CategoryEntity> page = this.page(
@@ -51,6 +59,38 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
                 }).collect(Collectors.toList());
 
         return collect;
+    }
+
+    @Override
+    public Long[] findCategoryPath(Long categoryId) {
+        List<Long> parentPath = this.findParentPath(new ArrayList<>(), categoryId);
+        return parentPath.toArray(new Long[0]);
+    }
+
+    @Transactional
+    @Override
+    public void updateDetail(CategoryEntity category) {
+        baseMapper.updateById(category);
+
+        if (StringUtils.hasLength(category.getName())) {
+            //同步更新其他关联表中的数据
+            relationService.updateCategory(category.getCatId(), category.getName());
+        }
+    }
+
+    /**
+     * 递归从下到上查询完整路径
+     * @param pathList
+     * @param categoryId
+     * @return
+     */
+    private List<Long> findParentPath(List<Long> pathList, Long categoryId) {
+        CategoryEntity entity = this.getById(categoryId);
+        if (entity.getParentCid() != 0) {
+            this.findParentPath(pathList, entity.getParentCid());
+        }
+        pathList.add(entity.getCatId());
+        return pathList;
     }
 
     /**
