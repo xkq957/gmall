@@ -1,15 +1,16 @@
 package com.xkq.gmall.product.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
+import com.xkq.gmall.product.entity.AttrEntity;
+import com.xkq.gmall.product.service.AttrAttrgroupRelationService;
+import com.xkq.gmall.product.service.AttrService;
 import com.xkq.gmall.product.service.CategoryService;
+import com.xkq.gmall.product.vo.AttrGroupRelationVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.xkq.gmall.product.entity.AttrGroupEntity;
 import com.xkq.gmall.product.service.AttrGroupService;
@@ -33,17 +34,10 @@ public class AttrGroupController {
     private AttrGroupService attrGroupService;
     @Resource
     CategoryService categoryService;
-
-    /**
-     * 列表
-     */
-    @RequestMapping("/list")
-    //@RequiresPermissions("product:attrgroup:list")
-    public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = attrGroupService.queryPage(params);
-
-        return R.ok().put("page", page);
-    }
+    @Resource
+    AttrService attrService;
+    @Resource
+    AttrAttrgroupRelationService relationService;
 
     /**
      * 获取分类属性分组
@@ -55,6 +49,58 @@ public class AttrGroupController {
         return R.ok().put("page", page);
     }
 
+    /**
+     * 获取已关联分组的属性
+     */
+    @RequestMapping("/{attrgroupId}/attr/relation")
+    //@RequiresPermissions("product:attrgroup:list")
+    public R getRelation(@PathVariable Long attrgroupId){
+//        PageUtils page = attrGroupService.queryPage(params, categoryId);
+        List<AttrEntity> attrEntityList = attrService.getRelationAttr(attrgroupId);
+        return R.ok().put("data", attrEntityList);
+    }
+
+    /**
+     * 获取未关联分组的属性
+     */
+    @RequestMapping("/{attrgroupId}/noattr/relation")
+    //@RequiresPermissions("product:attrgroup:list")
+    public R getNoRelation(@RequestParam Map<String, Object> params, @PathVariable Long attrgroupId){
+//        PageUtils page = attrGroupService.queryPage(params, categoryId);
+        PageUtils page = attrService.getNoRelationAttr(params, attrgroupId);
+        return R.ok().put("page", page);
+    }
+
+    /**
+     * 批量删除
+     * @param vos
+     * @return
+     */
+    @PostMapping("/attr/relation/delete")
+    public R deleteRelation(@RequestBody  AttrGroupRelationVo[] vos){
+        relationService.deleteRelation(vos);
+        return R.ok();
+    }
+
+
+
+    @PostMapping("/attr/relation")
+    public R addRelation(@RequestBody List<AttrGroupRelationVo> vos){
+
+        relationService.saveBatch(vos);
+        return R.ok();
+    }
+
+    /**
+     * 列表
+     */
+    @RequestMapping("/list")
+    //@RequiresPermissions("product:attrgroup:list")
+    public R list(@RequestParam Map<String, Object> params){
+        PageUtils page = attrGroupService.queryPage(params);
+
+        return R.ok().put("page", page);
+    }
 
     /**
      * 信息

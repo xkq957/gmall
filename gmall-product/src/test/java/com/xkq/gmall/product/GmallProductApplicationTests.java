@@ -1,6 +1,8 @@
 package com.xkq.gmall.product;
 
+import com.xkq.common.utils.PageUtils;
 import com.xkq.gmall.product.entity.CategoryEntity;
+import com.xkq.gmall.product.service.AttrService;
 import com.xkq.gmall.product.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -10,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
@@ -19,6 +22,8 @@ public class GmallProductApplicationTests {
 
 	@Resource
 	private CategoryService categoryService;
+	@Resource
+	private AttrService attrService;
 
 	@Test
 	public void contextLoads() {
@@ -30,6 +35,11 @@ public class GmallProductApplicationTests {
 	public void getParentPath() {
 		Long[] categoryPath = categoryService.findCategoryPath(225L);
 		log.info("完整路径:[{}]", Arrays.asList(categoryPath));
+	}
+
+	@Test
+	public void testGetAttrBaseList() {
+		PageUtils pageUtils = attrService.queryPage(new HashMap<>(), 225L);
 	}
 
 }
