@@ -10,6 +10,28 @@
         <result property="attrGroupId" column="attr_group_id"/>
         <result property="attrSort" column="attr_sort"/>
     </resultMap>
+    <sql id="columns">
+        id, attr_id, attr_group_id, attr_sort
+    </sql>
+
+    <delete id="deleteBatchRelation">
+        DELETE FROM `pms_attr_attrgroup_relation` WHERE
+        <foreach collection="list" item="item" separator=" OR ">
+            (attr_id=#{item.attrId} AND attr_group_id=#{item.attrGroupId})
+        </foreach>
+    </delete>
+    <select id="selectBatchAttrIds" resultMap="attrAttrgroupRelationMap" parameterType="List">
+        select <include refid="columns"/> from pms_attr_attrgroup_relation
+        <where>
+            <if test="list != null">
+                attr_id in
+                <foreach collection="list" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+
+        </where>
+    </select>
 
 
 </mapper>

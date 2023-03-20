@@ -2,6 +2,8 @@ server:
   port: 8820
 
 spring:
+  application:
+    name: gmall-member
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
@@ -9,6 +11,10 @@ spring:
       username: root
       url: jdbc:mysql://192.168.188.100:3306/gmall_ums?serverTimezone=Asia/Shanghai&useSSL=false
       driver-class-name: com.mysql.cj.jdbc.Driver
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.188.100:8848
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml
   global-config:
