@@ -15,6 +15,10 @@ spring:
     nacos:
       discovery:
         server-addr: 192.168.188.100:8848
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
 product:
   user:
     name: xkq1
