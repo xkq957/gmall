@@ -3,6 +3,7 @@ package com.xkq.gmall.product;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
  * 1、整合MyBatis-Plus
@@ -19,6 +20,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * 				1）创建application.yml
  * 		2）配置Mybatis-Plus
  */
+@EnableFeignClients(basePackages = "com.xkq.gmall.product.feign")
 @SpringBootApplication
 @MapperScan("com.xkq.gmall.product.dao")
 public class GmallProductApplication {
