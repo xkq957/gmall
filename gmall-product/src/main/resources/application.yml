@@ -26,6 +26,8 @@ product:
 logging:
   level:
     com.xkq.gmall.product.dao: DEBUG
+    # 避免nacos不停输出日志current ips:(1) service: DEFAULT_GROUP@@gmall-coupon -> ..
+    com.alibaba.nacos.client.naming: WARN
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml
