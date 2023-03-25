@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.xkq</groupId>
-    <artifactId>gmall-third-patry</artifactId>
+    <artifactId>gmall-third-party</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>gmall-third-patry</name>
-    <description>gmall-third-patry</description>
+    <name>gmall-third-party</name>
+    <description>gmall-third-party</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
