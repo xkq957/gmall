@@ -23,6 +23,7 @@
         <!--2.1.2.RELEASE找不到bootstrap.properties会默认使用本地配置文件，导致注册中心配置没用-->
         <spring-cloud-alibaba.version>2.1.0.RELEASE</spring-cloud-alibaba.version>
         <druid.version>1.1.13</druid.version>
+        <elasticsearch.version>7.6.2</elasticsearch.version>
     </properties>
 
     <modules>
@@ -32,6 +33,7 @@
         <module>gmall-product</module>
         <module>gmall-ware</module>
         <module>gmall-common</module>
+        <module>gmall-search</module>
         <module>renren-fast</module>
 <!--        <module>renren-generator</module>-->
     </modules>
