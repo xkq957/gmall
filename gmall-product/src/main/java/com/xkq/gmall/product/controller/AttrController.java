@@ -1,19 +1,18 @@
 package com.xkq.gmall.product.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import com.xkq.common.constant.ProductConstant;
+import com.xkq.gmall.product.entity.ProductAttrValueEntity;
 import com.xkq.gmall.product.service.CategoryService;
+import com.xkq.gmall.product.service.ProductAttrValueService;
 import com.xkq.gmall.product.vo.AttrRspVo;
 import com.xkq.gmall.product.vo.AttrVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.xkq.gmall.product.entity.AttrEntity;
 import com.xkq.gmall.product.service.AttrService;
@@ -37,6 +36,38 @@ public class AttrController {
     private AttrService attrService;
     @Resource
     CategoryService categoryService;
+    @Autowired
+    ProductAttrValueService productAttrValueService;
+
+    /**
+     * 获取spu规格
+     * @param spuId
+     * @return
+     */
+    // /product/attr/base/listforspu/{spuId}
+    @GetMapping("/base/listforspu/{spuId}")
+    public R baseAttrlistforspu(@PathVariable("spuId") Long spuId){
+
+        List<ProductAttrValueEntity> entities = productAttrValueService.baseAttrlistforspu(spuId);
+
+        return R.ok().put("data",entities);
+    }
+
+    /**
+     * 修改商品规格
+     * @param spuId
+     * @param entities
+     * @return
+     */
+    ///product/attr/update/{spuId}
+    @PostMapping("/update/{spuId}")
+    public R updateSpuAttr(@PathVariable("spuId") Long spuId,
+                           @RequestBody List<ProductAttrValueEntity> entities){
+
+        productAttrValueService.updateSpuAttr(spuId,entities);
+
+        return R.ok();
+    }
 
     /**
      * 查询规格参数列表
