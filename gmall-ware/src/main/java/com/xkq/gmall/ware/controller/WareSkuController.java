@@ -1,8 +1,10 @@
 package com.xkq.gmall.ware.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
+import com.xkq.common.to.SkuHasStockVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +31,17 @@ import com.xkq.common.utils.R;
 public class WareSkuController {
     @Autowired
     private WareSkuService wareSkuService;
+
+    /**
+     * 获取SKU是否有库存
+     * @param ids
+     * @return
+     */
+    @RequestMapping("/getSkuHasStocks")
+    public R getSkuHasStocks(@RequestBody List<Long> ids) {
+        List<SkuHasStockVo> skuHasStocks = wareSkuService.getSkuHasStocks(ids);
+        return R.ok().put("data", skuHasStocks);
+    }
 
     /**
      * 列表

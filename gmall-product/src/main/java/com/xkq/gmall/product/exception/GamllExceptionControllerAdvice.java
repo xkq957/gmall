@@ -1,8 +1,7 @@
 package com.xkq.gmall.product.exception;
 
-import com.xkq.common.exception.BizCodeEnume;
+import com.xkq.common.exception.BizCodeEnum;
 import com.xkq.common.utils.R;
-import com.xkq.gmall.product.entity.BrandEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -30,6 +29,6 @@ public class GamllExceptionControllerAdvice {
             String field = item.getField();
             map.put(field, message);
         });
-        return R.error(BizCodeEnume.VAILD_EXCEPTION.getCode(), BizCodeEnume.VAILD_EXCEPTION.getMsg()).put("data", map);
+        return R.error(BizCodeEnum.VAILD_EXCEPTION.getCode(), BizCodeEnum.VAILD_EXCEPTION.getMsg()).put("data", map);
     }
 }
