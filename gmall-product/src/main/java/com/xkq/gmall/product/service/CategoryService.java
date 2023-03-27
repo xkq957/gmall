@@ -3,6 +3,7 @@ package com.xkq.gmall.product.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xkq.common.utils.PageUtils;
 import com.xkq.gmall.product.entity.CategoryEntity;
+import com.xkq.gmall.product.vo.Catalog2Vo;
 
 import java.util.List;
 import java.util.Map;
@@ -23,5 +24,9 @@ public interface CategoryService extends IService<CategoryEntity> {
     Long[] findCategoryPath(Long categoryId);
 
     void updateDetail(CategoryEntity category);
+
+    List<CategoryEntity> getLevel1Catagories();
+
+    Map<String, List<Catalog2Vo>> getCatalogJsonDbWithSpringCache();
 }
 

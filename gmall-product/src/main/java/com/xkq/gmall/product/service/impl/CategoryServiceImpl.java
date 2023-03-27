@@ -1,6 +1,9 @@
 package com.xkq.gmall.product.service.impl;
 
 import com.xkq.gmall.product.service.CategoryBrandRelationService;
+import com.xkq.gmall.product.vo.Catalog2Vo;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,7 +25,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 
-
+@Slf4j
 @Service("categoryService")
 public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity> implements CategoryService {
 
@@ -110,6 +113,59 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
                     //2.菜单排序
                     return (item1.getSort() == null ? 0 : item1.getSort()) - (item2.getSort() == null ? 0 : item2.getSort());
                 }).collect(Collectors.toList());
+        return collect;
+    }
+
+    /**
+     * 前端
+     * @return
+     */
+    @Override
+    public List<CategoryEntity> getLevel1Catagories() {
+        //        long start = System.currentTimeMillis();
+        List<CategoryEntity> parent_cid = this.list(new QueryWrapper<CategoryEntity>().eq("parent_cid", 0));
+//        System.out.println("查询一级菜单时间:"+(System.currentTimeMillis()-start));
+        return parent_cid;
+    }
+
+    @Cacheable(value = {"category"},key = "#root.methodName",sync = true)
+    public Map<String, List<Catalog2Vo>> getCatalogJsonDbWithSpringCache() {
+        return getCategoriesDb();
+    }
+
+    private Map<String, List<Catalog2Vo>> getCategoriesDb() {
+        log.info("查询了数据库");
+        //优化业务逻辑，仅查询一次数据库
+        List<CategoryEntity> categoryEntities = this.list();
+        //查出所有一级分类
+        List<CategoryEntity> level1Categories = getCategoryByParentCid(categoryEntities, 0L);
+        //封装数据
+        Map<String, List<Catalog2Vo>> listMap = level1Categories.stream().collect(Collectors.toMap(k->k.getCatId().toString(), v -> {
+            //遍历查找出二级分类
+            List<CategoryEntity> level2Categories = getCategoryByParentCid(categoryEntities, v.getCatId());
+            List<Catalog2Vo> catalog2Vos=null;
+            if (level2Categories!=null){
+                //封装二级分类到vo并且查出其中的三级分类
+                catalog2Vos = level2Categories.stream().map(cat -> {
+                    //遍历查出三级分类并封装
+                    List<CategoryEntity> level3Catagories = getCategoryByParentCid(categoryEntities, cat.getCatId());
+                    List<Catalog2Vo.Catalog3Vo> catalog3Vos = null;
+                    if (level3Catagories != null) {
+                        catalog3Vos = level3Catagories.stream()
+                                .map(level3 -> new Catalog2Vo.Catalog3Vo(level3.getParentCid().toString(), level3.getCatId().toString(), level3.getName()))
+                                .collect(Collectors.toList());
+                    }
+                    Catalog2Vo catalog2Vo = new Catalog2Vo(v.getCatId().toString(), cat.getCatId().toString(), cat.getName(), catalog3Vos);
+                    return catalog2Vo;
+                }).collect(Collectors.toList());
+            }
+            return catalog2Vos;
+        }));
+        return listMap;
+    }
+
+    private List<CategoryEntity> getCategoryByParentCid(List<CategoryEntity> categoryEntities, long l) {
+        List<CategoryEntity> collect = categoryEntities.stream().filter(cat -> cat.getParentCid() == l).collect(Collectors.toList());
         return collect;
     }
 
