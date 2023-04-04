@@ -18,9 +18,9 @@ public class SearchController {
 
     @GetMapping(value = {"/search.html","/"})
     public String getSearchPage(SearchParam searchParam, Model model, HttpServletRequest request) {
-//        searchParam.set_queryString(request.getQueryString());
-//        SearchResult result=searchService.getSearchResult(searchParam);
-//        model.addAttribute("result", result);
+        searchParam.set_queryString(request.getQueryString());
+        SearchResult result=searchService.getSearchResult(searchParam);
+        model.addAttribute("result", result);
         return "search";
     }
 }
