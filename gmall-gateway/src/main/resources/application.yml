@@ -42,6 +42,12 @@ spring:
           filters:
             - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}
 
+        #将主机地址为search.gulimall.com转发至gulimall-search
+        - id: gmall_serach_host
+          uri: lb://gmall-search
+          predicates:
+            - Host=search.gmall.com
+
         - id: gmall_host
           uri: lb://gmall-product
           predicates:
