@@ -1,5 +1,6 @@
 package com.xkq.gmall.product.service.impl;
 
+import com.xkq.gmall.product.vo.item.SpuItemAttrGroupVo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,6 +53,11 @@ public class ProductAttrValueServiceImpl extends ServiceImpl<ProductAttrValueDao
             return item;
         }).collect(Collectors.toList());
         this.saveBatch(collect);
+    }
+
+    @Override
+    public List<SpuItemAttrGroupVo> getProductGroupAttrsBySpuId(Long spuId, Long catalogId) {
+        return baseMapper.getProductGroupAttrsBySpuId(spuId, catalogId);
     }
 
 }

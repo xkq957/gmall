@@ -21,7 +21,12 @@ spring:
   thymeleaf:
     cache: false
 
-
+# 自定义线程池参数
+gmall:
+  thread:
+    corePoolSize: 10
+    maxPoolSize: 20
+    keepAliveTime: 300
 product:
   user:
     name: xkq1

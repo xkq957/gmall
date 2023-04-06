@@ -3,6 +3,7 @@ package com.xkq.gmall.product.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xkq.common.utils.PageUtils;
 import com.xkq.gmall.product.entity.ProductAttrValueEntity;
+import com.xkq.gmall.product.vo.item.SpuItemAttrGroupVo;
 
 import java.util.List;
 import java.util.Map;
@@ -23,5 +24,7 @@ public interface ProductAttrValueService extends IService<ProductAttrValueEntity
     List<ProductAttrValueEntity> baseAttrlistforspu(Long spuId);
 
     void updateSpuAttr(Long spuId, List<ProductAttrValueEntity> entities);
+
+    List<SpuItemAttrGroupVo> getProductGroupAttrsBySpuId(Long spuId, Long catalogId);
 }
 

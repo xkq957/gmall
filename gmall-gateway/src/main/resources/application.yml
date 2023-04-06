@@ -5,6 +5,9 @@ spring:
   application:
     name: gmall-gateway
   cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.188.100:8848
     gateway:
       routes:
         - id: product_route
@@ -42,16 +45,14 @@ spring:
           filters:
             - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}
 
-        #将主机地址为search.gulimall.com转发至gulimall-search
+        #将主机地址为search.gmall.com转发至gmall-search
         - id: gmall_serach_host
           uri: lb://gmall-search
           predicates:
             - Host=search.gmall.com
 
+        #将主机地址为**.gmall.com转发至gmall-product
         - id: gmall_host
           uri: lb://gmall-product
           predicates:
             - Host=**.gmall.com
-    nacos:
-      discovery:
-        server-addr: 192.168.188.100:8848
